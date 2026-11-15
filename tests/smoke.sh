@@ -31,7 +31,7 @@ KbdInteractiveAuthentication no
 AllowUsers $USER
 EOF
 sudo install -d -m 755 /run/sshd
-sudo /usr/sbin/sshd -f "$lab/sshd_config"
+sudo /usr/sbin/sshd -f "$lab/sshd_config" -E "$lab/sshd.log"
 args=(--host 127.0.0.1 --port 13164 --user "$USER" --identity "$lab/identity"
       --known-hosts "$lab/known_hosts" --public-ip "$ip"
       --reality-port 14443 --https-port 13417 --hy2-port 16289)
@@ -43,7 +43,10 @@ if [[ "${VPS_SMOKE_ACME:-}" == pebble ]]; then
     install -m 700 "$lab/pebble-linux-amd64/linux/amd64/pebble" "$lab/pebble"
     args+=(--enable-ufw)
 fi
-python3 "$scripts/deploy.py" preflight "${args[@]}"
+if ! python3 "$scripts/deploy.py" preflight "${args[@]}"; then
+    sudo tail -n 20 "$lab/sshd.log"
+    exit 1
+fi
 sudo env GITHUB_ACTIONS=true PYTHONPATH="$scripts" LC_ALL=C VPS_SMOKE_ACME="${VPS_SMOKE_ACME:-}" python3 tests/fixture.py "$ip" "$lab"
 
 curl -fsSL --max-time 90 --retry 2 -o "$lab/mihomo.gz" \

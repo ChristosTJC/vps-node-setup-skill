@@ -59,6 +59,6 @@ if ! "${remote[@]}" 'timeout 120 cloud-init status --wait'; then
     exit 1
 fi
 git -C "$GITHUB_WORKSPACE" archive HEAD | "${remote[@]}" 'mkdir -p ~/source && tar -xf - -C ~/source'
-"${remote[@]}" 'sudo apt-get -qq update && sudo apt-get -qq install -y curl ca-certificates ufw &&
+"${remote[@]}" 'sudo apt-get -qq update && sudo env DEBIAN_FRONTEND=noninteractive apt-get -qq install -y curl ca-certificates ufw &&
     sudo ufw allow 22/tcp &&
-    cd ~/source && GITHUB_ACTIONS=true RUNNER_TEMP=/tmp VPS_SMOKE_ACME=pebble bash tests/smoke.sh'
+    cd ~/source && GITHUB_ACTIONS=true RUNNER_TEMP="$HOME" VPS_SMOKE_ACME=pebble bash tests/smoke.sh'

@@ -34,7 +34,7 @@ CERTBOT = WORK / "certbot/bin/certbot"
 SITE = Path("/etc/nginx/sites-available/vps-node-setup")
 ENABLED = Path("/etc/nginx/sites-enabled/vps-node-setup")
 PANEL_PORT, SUB_PORT, WS_PORT = 38471, 38472, 10000
-SUPPORTED_OS = {("ubuntu", "24.04"): "Ubuntu 24.04 LTS", ("debian", "13"): "Debian 13"}
+SUPPORTED_OS = {("ubuntu", "24.04"): "Ubuntu 24.04", ("debian", "13"): "Debian 13"}
 RELEASES = {
     "panel": (
         "https://github.com/MHSanaei/3x-ui/releases/download/v3.11.0/x-ui-linux-amd64.tar.gz",
