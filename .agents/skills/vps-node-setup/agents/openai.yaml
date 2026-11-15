@@ -1,0 +1,4 @@
+interface:
+  display_name: "VPS 节点部署"
+  short_description: "配置 3x-ui、REALITY、VMess、Hy2 和 Mihomo 订阅"
+  default_prompt: "用 $vps-node-setup 部署我的 Ubuntu VPS，并验证三个节点。"
