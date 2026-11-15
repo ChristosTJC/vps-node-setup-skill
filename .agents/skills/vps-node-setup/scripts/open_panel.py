@@ -28,16 +28,16 @@ def ssh_args(access, interactive=False):
 def wait_for_panel(process, port, path):
     until = time.monotonic() + 22
     while process.poll() is None and time.monotonic() < until:
-        http = http.client.HTTPConnection("127.0.0.1", port, timeout=1)
+        connection = http.client.HTTPConnection("127.0.0.1", port, timeout=1)
         try:
-            http.request("GET", path)
-            with http.getresponse() as response:
+            connection.request("GET", path)
+            with connection.getresponse() as response:
                 if response.status == 200 and process.poll() is None:
                     return True
         except (OSError, http.client.HTTPException):
             pass
         finally:
-            http.close()
+            connection.close()
         time.sleep(0.25)
     return False
 
