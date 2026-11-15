@@ -1,18 +1,18 @@
 # VPS Node Setup Skill
 
-把一台新的 Ubuntu 24.04 VPS 配成由 3x-ui 管理的个人代理服务器，生成 Clash/Mihomo 订阅和一键打开面板的入口。基于两次实际部署整理，包含初次安装、断点重跑、证书续期和连通验证。
+把一台新的 Ubuntu 24.04 LTS 或 Debian 13 VPS 配成由 3x-ui 管理的个人代理服务器，生成 Clash/Mihomo 订阅和一键打开面板的入口。基于两次实际部署整理，包含初次安装、断点重跑、证书续期和连通验证。
 
 ## 交给 AI 部署
 
 在 Codex 中打开本仓库，或请支持 Agent Skills 的客户端安装仓库中的 `.agents/skills/vps-node-setup`。也可以复制这句话，让能运行本地命令和 SSH 的 AI 先克隆仓库再调用 Skill：
 
-> 请从 https://github.com/ChristosTJC/vps-node-setup-skill 安装并调用 $vps-node-setup。帮我在我的 Ubuntu 24.04 VPS 上配置 REALITY、VMess 和 Hy2，用 3x-ui 管理并生成 Mihomo 订阅。先检查我现有的 SSH 连接。
+> 请从 https://github.com/ChristosTJC/vps-node-setup-skill 安装并调用 $vps-node-setup。帮我在 VPS 上配置 REALITY、VMess 和 Hy2，用 3x-ui 管理并生成 Mihomo 订阅。先检查系统和现有 SSH 连接。
 
 准备 VPS 的公网 IPv4、现有 SSH 端口、登录账号和本机密钥。没有域名也能用。只有初始密码时，让 OpenSSH 在本机终端提示输入，或通过服务商控制台添加公钥。
 
 ## 直接运行
 
-适用环境为 Ubuntu 24.04 LTS x86_64、systemd、root 或免交互 sudo。运行脚本的电脑需要 Python 3.10+ 和 OpenSSH。先对照服务商控制台核对主机指纹，再将其保存到 `known_hosts`。
+适用环境为 **Ubuntu 24.04 LTS 或 Debian 13**，均要求 x86_64（amd64）、systemd、root 或免交互 sudo。脚本会通过 SSH 自动识别发行版。运行脚本的电脑需要 Python 3.10+ 和 OpenSSH。先对照服务商控制台核对主机指纹，再将其保存到 `known_hosts`。
 
 ```sh
 git clone https://github.com/ChristosTJC/vps-node-setup-skill.git

@@ -34,6 +34,7 @@ CERTBOT = WORK / "certbot/bin/certbot"
 SITE = Path("/etc/nginx/sites-available/vps-node-setup")
 ENABLED = Path("/etc/nginx/sites-enabled/vps-node-setup")
 PANEL_PORT, SUB_PORT, WS_PORT = 38471, 38472, 10000
+SUPPORTED_OS = {("ubuntu", "24.04"): "Ubuntu 24.04 LTS", ("debian", "13"): "Debian 13"}
 RELEASES = {
     "panel": (
         "https://github.com/MHSanaei/3x-ui/releases/download/v3.11.0/x-ui-linux-amd64.tar.gz",
@@ -145,11 +146,11 @@ def listeners():
 def preflight(spec, ssh_server_port, state):
     os_release = dict(line.split("=", 1) for line in Path("/etc/os-release").read_text().splitlines()
                       if "=" in line)
-    if (os_release.get("ID", "").strip('"') != "ubuntu"
-            or os_release.get("VERSION_ID", "").strip('"') != "24.04"
-            or os.uname().machine != "x86_64"
+    release = tuple(os_release.get(key, "").strip('"') for key in ("ID", "VERSION_ID"))
+    system = SUPPORTED_OS.get(release)
+    if (not system or os.uname().machine != "x86_64"
             or Path("/proc/1/comm").read_text().strip() != "systemd"):
-        raise SetupError("安装入口要求 Ubuntu 24.04 LTS x86_64，且由 systemd 管理。")
+        raise SetupError("支持 Ubuntu 24.04 LTS 和 Debian 13，需要 x86_64 与 systemd。")
     if ("tcp", ssh_server_port) in spec.sockets():
         raise SetupError("应用端口与 SSH 的服务器端监听重合，请调整应用端口。")
     if not state:
@@ -166,7 +167,7 @@ def preflight(spec, ssh_server_port, state):
         answers = {row[4][0] for row in socket.getaddrinfo(spec.domain, 443, type=socket.SOCK_STREAM)}
         if answers != {spec.public_ip}:
             raise SetupError("域名需直接指向所填公网 IPv4（仅此 A 记录，关闭代理/CDN，移除未部署的 AAAA）。")
-    return {"os": "Ubuntu 24.04 x86_64", "ssh_server_port": ssh_server_port,
+    return {"os": f"{system} x86_64", "ssh_server_port": ssh_server_port,
             "cloud_inbound": spec.cloud_ports(), "managed_install": bool(state),
             "deployment_complete": bool(state and state.get("complete"))}
 

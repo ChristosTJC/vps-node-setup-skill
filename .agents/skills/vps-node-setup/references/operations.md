@@ -2,7 +2,7 @@
 
 ## 最少输入与初次登录
 
-需要一台用户有权管理的 Ubuntu 24.04 LTS x86_64 VPS、一个可接收入站的公网 IPv4，以及现有 SSH 入口。Linux 客户端也可以 SSH 到不同地址，再通过 `--public-ip` 指定节点的公网 IPv4。Windows/macOS/Linux 本机需 Python 3.10+ 和 OpenSSH。
+需要一台用户有权管理的 Ubuntu 24.04 LTS 或 Debian 13 x86_64 VPS、一个可接收入站的公网 IPv4，以及现有 SSH 入口。SSH 可以使用不同的地址，通过 `--public-ip` 指定节点的公网 IPv4。Windows/macOS/Linux 本机需 Python 3.10+ 和 OpenSSH。
 
 先用服务商控制台或开通资料对照 SSH 主机指纹，再用 `ssh -p <端口> <账号>@<IP>` 初次连接并保存匹配的指纹。控制台可用时，在 VPS 上运行 `ssh-keygen -lf /etc/ssh/ssh_host_ed25519_key.pub` 查看服务器 ED25519 指纹。主机重装后指纹变化，应通过可信控制台复核新指纹。SSH 客户端使用系统 `known_hosts` 或带 `--known-hosts` 的指定文件。
 
